@@ -19,53 +19,53 @@ public class Converter {
 
     FileUploadController fileUploadController;
     private static final Map<Integer, String> GM_DRUM_MAP = Map.ofEntries(
-            Map.entry(35, "Acoustic Bass Drum"),
-            Map.entry(36, "Bass Drum 1"),
-            Map.entry(37, "Side Stick"),
-            Map.entry(38, "Acoustic Snare"),
-            Map.entry(39, "Hand Clap"),
-            Map.entry(40, "Electric Snare"),
-            Map.entry(41, "Low Floor Tom"),
+            Map.entry(35, "Kick"),
+            Map.entry(36, "Kick"),
+            Map.entry(37, "Snare"),
+            Map.entry(38, "Snare"),
+            Map.entry(39, "Snare"),
+            Map.entry(40, "Snare"),
+            Map.entry(41, "Floor Tom"),
             Map.entry(42, "Closed Hi-Hat"),
-            Map.entry(43, "High Floor Tom"),
-            Map.entry(44, "Pedal Hi-Hat"),
-            Map.entry(45, "Low Tom"),
+            Map.entry(43, "Floor Tom"),
+            Map.entry(44, "Closed Hi-Hat"),
+            Map.entry(45, "Tom 1"),
             Map.entry(46, "Open Hi-Hat"),
-            Map.entry(47, "Low-Mid Tom"),
-            Map.entry(48, "Hi-Mid Tom"),
-            Map.entry(49, "Crash Cymbal 1"),
-            Map.entry(50, "High Tom"),
-            Map.entry(51, "Ride Cymbal 1"),
-            Map.entry(52, "Chinese Cymbal"),
-            Map.entry(53, "Ride Bell"),
-            Map.entry(54, "Tambourine"),
-            Map.entry(55, "Splash Cymbal"),
-            Map.entry(56, "Cowbell"),
-            Map.entry(57, "Crash Cymbal 2"),
-            Map.entry(58, "Vibraslap"),
-            Map.entry(59, "Ride Cymbal 2"),
-            Map.entry(60, "Hi Bongo"),
-            Map.entry(61, "Low Bongo"),
-            Map.entry(62, "Mute Hi Conga"),
-            Map.entry(63, "Open Hi Conga"),
-            Map.entry(64, "Low Conga"),
-            Map.entry(65, "High Timbale"),
-            Map.entry(66, "Low Timbale"),
-            Map.entry(67, "High Agogo"),
-            Map.entry(68, "Low Agogo"),
-            Map.entry(69, "Cabasa"),
-            Map.entry(70, "Maracas"),
-            Map.entry(71, "Short Whistle"),
-            Map.entry(72, "Long Whistle"),
-            Map.entry(73, "Short Guiro"),
-            Map.entry(74, "Long Guiro"),
-            Map.entry(75, "Claves"),
-            Map.entry(76, "Hi Wood Block"),
-            Map.entry(77, "Low Wood Block"),
-            Map.entry(78, "Mute Cuica"),
-            Map.entry(79, "Open Cuica"),
-            Map.entry(80, "Mute Triangle"),
-            Map.entry(81, "Open Triangle")
+            Map.entry(47, "Tom 2"),
+            Map.entry(48, "Tom 2"),
+            Map.entry(49, "Crash"),
+            Map.entry(50, "Tom 2"),
+            Map.entry(51, "Ride"),
+            Map.entry(52, "Crash"),
+            Map.entry(53, "Ride"),
+            Map.entry(54, "Crash"),
+            Map.entry(55, "Crash"),
+            Map.entry(56, "Snare"),
+            Map.entry(57, "Crash"),
+            Map.entry(58, "Snare"),
+            Map.entry(59, "Ride"),
+            Map.entry(60, "Tom 1"),
+            Map.entry(61, "Tom 1"),
+            Map.entry(62, "Snare"),
+            Map.entry(63, "Snare"),
+            Map.entry(64, "Floor Tom"),
+            Map.entry(65, "Tom 2"),
+            Map.entry(66, "Floor Tom"),
+            Map.entry(67, "Crash"),
+            Map.entry(68, "Crash"),
+            Map.entry(69, "Closed Hi-Hat"),
+            Map.entry(70, "Closed Hi-Hat"),
+            Map.entry(71, "Crash"),
+            Map.entry(72, "Crash"),
+            Map.entry(73, "Closed Hi-Hat"),
+            Map.entry(74, "Open Hi-Hat"),
+            Map.entry(75, "Snare"),
+            Map.entry(76, "Tom 1"),
+            Map.entry(77, "Floor Tom"),
+            Map.entry(78, "Snare"),
+            Map.entry(79, "Snare"),
+            Map.entry(80, "Crash"),
+            Map.entry(81, "Crash")
     );
     public void convert(String filepath) throws MidiUnavailableException, InvalidMidiDataException, IOException {
 
@@ -100,10 +100,35 @@ public class Converter {
                     );
 
                     System.out.println(
-                            "Channel " + (sm.getChannel() + 1) +
-                                    " | " + drum +
-                                    " | Velocity " + velocity
+                           drum
                     );
+                    if (drum.equals("Floor Tom")){
+                        //insert here piece to make LED or Pneumatic
+                    }
+                    if (drum.equals("Snare")){
+                        //insert here piece to make LED or Pneumatic
+                    }
+                    if (drum.equals("Tom 1")){
+                        //insert here piece to make LED or Pneumatic
+                    }
+                    if (drum.equals("Tom 2")){
+                        //insert here piece to make LED or Pneumatic
+                    }
+                    if (drum.equals("Open Hi-Hat")){
+                        //insert here piece to make LED or Pneumatic
+                    }
+                    if (drum.equals("Closed Hi-Hat")){
+                        //insert here piece to make LED or Pneumatic
+                    }
+                    if (drum.equals("Kick")){
+                        //insert here piece to make LED or Pneumatic
+                    }
+                    if (drum.equals("Crash")){
+                        //insert here piece to make LED or Pneumatic
+                    }
+                    if (drum.equals("Ride")){
+                        //insert here piece to make LED or Pneumatic
+                    }
                 }
             }
 
