@@ -1,10 +1,10 @@
-package org.example.drumserver;
+package org.example.drumcontroller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DrumserverApplicationTests {
+class DrumControllerApplicationTests {
 
     @Test
     void contextLoads() {
