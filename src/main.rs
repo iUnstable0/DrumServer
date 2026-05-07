@@ -264,6 +264,7 @@ async fn handle_client_msg(state: &AppState, msg: ClientMsg) -> Option<ServerMsg
             position_ms,
             speed,
             count_in_ms,
+            count_in_beat_ms,
             hits,
             ramp_ms,
             lead_ms,
@@ -280,6 +281,7 @@ async fn handle_client_msg(state: &AppState, msg: ClientMsg) -> Option<ServerMsg
                 ramp_ms,
                 lead_ms,
                 count_in_ms,
+                count_in_beat_ms,
                 loop_enabled,
                 loop_start_ms,
                 loop_end_ms,
@@ -292,6 +294,7 @@ async fn handle_client_msg(state: &AppState, msg: ClientMsg) -> Option<ServerMsg
                 ramp_ms,
                 lead_ms,
                 count_in_ms,
+                count_in_beat_ms,
                 loop_enabled,
                 loop_start_ms,
                 loop_end_ms,
@@ -313,9 +316,10 @@ async fn handle_client_msg(state: &AppState, msg: ClientMsg) -> Option<ServerMsg
         }
         ClientMsg::ClockSync {
             drumui_t_ns: _,
+            pi_t_ns,
             position_ms,
         } => {
-            state.handle.clock_sync(position_ms);
+            state.handle.clock_sync(pi_t_ns, position_ms);
             None
         }
         ClientMsg::SetBrightness { level } => {

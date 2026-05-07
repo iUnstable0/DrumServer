@@ -5,24 +5,32 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/drum-pi serve --port 9090
+# `--port` is a top-level CLI arg (before the `serve` subcommand). 9090 is
+# the default; passing it explicitly so the port is visible in `systemctl
+# cat` and easy to change.
+ExecStart=/usr/local/bin/drum-pi --port 9090 serve
 Restart=on-failure
 RestartSec=2
 
-# Run as a regular user that's a member of the gpio group so rppal can
-# access /dev/gpiochip0 without root. Adjust the user name to whatever you
-# created on the Pi.
-User=pi
-Group=gpio
+# Runs as root so rppal can open /dev/gpiochip0 directly. If you create a
+# dedicated user that's a member of the gpio group, switch to User=<that>
+# / Group=gpio instead.
+
+# Surface the debug-level logs added for the loop-wrap / clock_sync snap
+# investigation. Drop to `info` once the loop dropout is confirmed fixed.
+Environment=RUST_LOG=drum_pi=debug
+
+# Append to a plain logfile rather than journald — `tail -f /var/log/drum-pi.log`
+# gives the same liveness as `journalctl -fu drum-pi` without needing journal
+# tooling. systemd opens the FD before sandboxing, so this still works under
+# ProtectSystem=strict. `append:` preserves history across restarts.
+StandardOutput=append:/var/log/drum-pi.log
+StandardError=append:/var/log/drum-pi.log
 
 # Tighten privileges — no need for filesystem writes outside /dev.
 ProtectSystem=strict
 ProtectHome=true
 NoNewPrivileges=true
-
-# Stream logs to journalctl
-StandardOutput=journal
-StandardError=journal
 
 [Install]
 WantedBy=multi-user.target
