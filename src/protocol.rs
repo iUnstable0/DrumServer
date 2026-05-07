@@ -1,5 +1,12 @@
 use serde::{Deserialize, Serialize};
 
+/// Default reaction lead, in ms, when drumui doesn't supply one. ~100ms is a
+/// reasonable middle ground between trained drummers (50-80) and beginners
+/// (150+).
+fn default_lead_ms() -> f64 {
+    100.0
+}
+
 /// Mirrors drumui's `dto::PieceId`. Order and variants must match exactly so
 /// JSON round-trips between the two binaries are stable.
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
@@ -41,9 +48,29 @@ pub enum ClientMsg {
         start_at_pi_ns: u64,
         position_ms: f64,
         speed: f64,
+        /// Duration of the drumui count-in. The audio engine on drumui freezes
+        /// at `position_ms` for this long before song playback begins. Pi
+        /// counts pos up from `-count_in_ms` toward 0 during this window so
+        /// LED ramps to the first hit can already be in motion when audio
+        /// starts.
         count_in_ms: f64,
         hits: Vec<ScheduledHit>,
         ramp_ms: f64,
+        /// Reaction-lead applied to LED rendering only (not clock sync). LEDs
+        /// lead audio by this amount so the drummer's strike lands at audio
+        /// onset. 60-180ms typical. Defaulted on Pi for back-compat with
+        /// older drumui builds that don't send the field.
+        #[serde(default = "default_lead_ms")]
+        lead_ms: f64,
+        /// If true, Pi wraps `pos` from `loop_end_ms` back to `loop_start_ms`
+        /// to match drumui's audio loop. When false the loop fields are
+        /// ignored.
+        #[serde(default)]
+        loop_enabled: bool,
+        #[serde(default)]
+        loop_start_ms: f64,
+        #[serde(default)]
+        loop_end_ms: f64,
     },
 
     Pause {

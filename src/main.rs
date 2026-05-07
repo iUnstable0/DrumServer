@@ -263,13 +263,40 @@ async fn handle_client_msg(state: &AppState, msg: ClientMsg) -> Option<ServerMsg
             start_at_pi_ns,
             position_ms,
             speed,
-            count_in_ms: _,
+            count_in_ms,
             hits,
             ramp_ms,
+            lead_ms,
+            loop_enabled,
+            loop_start_ms,
+            loop_end_ms,
         } => {
             let n = hits.len();
-            state.handle.pre_roll(hits, start_at_pi_ns, position_ms, speed, ramp_ms);
-            info!(session_id, hits = n, position_ms, speed, ramp_ms, "pre-roll loaded");
+            state.handle.pre_roll(
+                hits,
+                start_at_pi_ns,
+                position_ms,
+                speed,
+                ramp_ms,
+                lead_ms,
+                count_in_ms,
+                loop_enabled,
+                loop_start_ms,
+                loop_end_ms,
+            );
+            info!(
+                session_id,
+                hits = n,
+                position_ms,
+                speed,
+                ramp_ms,
+                lead_ms,
+                count_in_ms,
+                loop_enabled,
+                loop_start_ms,
+                loop_end_ms,
+                "pre-roll loaded"
+            );
             Some(ServerMsg::Ack { for_msg: "preRoll".into() })
         }
         ClientMsg::Pause { at_position_ms: _ } => {
@@ -332,16 +359,26 @@ fn tick_loop(
             next = std::time::Instant::now() + interval;
         }
 
+        let tick_start = std::time::Instant::now();
         {
             let mut d = driver.lock();
             scheduler.tick(d.as_mut());
         }
+        let tick_ms = tick_start.elapsed().as_secs_f64() * 1000.0;
+        scheduler.record_tick_lag(tick_ms);
 
         let now = std::time::Instant::now();
         if next > now {
             std::thread::sleep(next - now);
+            next += interval;
+        } else {
+            // We've fallen behind by more than one interval — rebase to the
+            // current moment instead of borrowing time from future ticks.
+            // Without this, a slow GPIO write or scheduler stall would cause
+            // ticks to fire back-to-back until the cumulative lag was paid
+            // off, distorting LED timing.
+            next = now + interval;
         }
-        next += interval;
     }
 }
 
