@@ -14,6 +14,9 @@
 *.iws
 *.ipr
 
+# Java diagnostic tool build artifacts
+*.class
+
 # OS
 .DS_Store
 Thumbs.db

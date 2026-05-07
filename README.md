@@ -52,6 +52,17 @@ GPIO writes:
 ./target/release/drum-pi --mock serve
 ```
 
+## Optional Java diagnostic probe
+
+`tools/java/DrumPiProbe.java` is a standalone Java 21 diagnostic utility. It
+is not part of the Rust runtime, systemd service, GPIO driver, or drumui app;
+it only checks that a running server answers `/health` and accepts harmless
+WebSocket protocol messages.
+
+```
+java tools/java/DrumPiProbe.java --host 127.0.0.1 --port 9090
+```
+
 ## LED → GPIO map
 
 See [src/kit_layout.rs](src/kit_layout.rs) for the canonical table.
